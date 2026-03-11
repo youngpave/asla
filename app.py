@@ -4,15 +4,16 @@ from urllib.parse import urlparse, urljoin, quote, unquote
 import re
 import traceback
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def detect_m3u_type(content):
     """Rileva se è un M3U (lista IPTV) o un M3U8 (flusso HLS)"""
     if "#EXTM3U" in content and "#EXTINF" in content:
         return "m3u8"
     return "m3u"
-
 def replace_key_uri(line, headers_query):
     """Sostituisce l'URI della chiave AES-128 con il proxy"""
     match = re.search(r'URI="([^"]+)"', line)
